@@ -9,6 +9,7 @@
 #root{
   min-height: 100vh;
   display: flex;
+  background-color: black;
 }
 @keyframes fadeIn{
   0%{
