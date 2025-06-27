@@ -6,7 +6,7 @@ import { faCompass } from '@fortawesome/free-regular-svg-icons';
 
 
 // Dummy data and handlers to replace context
-const DUMMY_RESULT = "This is a sample Gemini response because Gemini Ai asking money so...";
+const DUMMY_RESULT = "This is a sample GO-CHAT-AI response because it is based on Gemini API, it asking money so...";
 
 const Main = () => {
 
@@ -37,7 +37,7 @@ const Main = () => {
   return (
     <div className='main'>
       <div className="nav">
-        <p>GO-AI</p>
+        <p>GO-CHAT-AI</p>
         <img src="https://cdn-icons-png.flaticon.com/512/4113/4113045.png" alt="logo" />
       </div>
       <div className="main-container">
@@ -97,7 +97,7 @@ const Main = () => {
             </div>
           </div>
           <p className="bottom-info">
-            Gemini may display inaccurate info, including about people, so double-check its responses. Your privacy and Gemini Apps
+            GO-CHAT-AI may display inaccurate info, including about people, so double-check its responses. Your privacy and Gemini Apps.
           </p>
         </div>
       </div>
