@@ -1,0 +1,105 @@
+*{
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px); /* optional slide-up effect */
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.signin-container{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%); 
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+
+      width: 100vw;
+  height: 100vh;
+  backdrop-filter: blur(8px); /* 🔍 Blur effect */
+  background-color: rgba(0, 0, 0, 0.3); /* Optional dark overlay */
+}
+
+.signin-card{
+    background-color: rgb(85, 6, 6);
+    height: fit-content;
+    width: 350px;
+      border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  padding: 20px;
+  animation: fadeIn 0.8s ease-in-out;
+}
+
+.signin-card h2{
+    text-align: center;
+    margin-bottom: 30px;
+    color: white;
+}
+.signin-form{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 12px;
+}
+.signin-form label{
+    margin-bottom: -7px;
+    color: white;
+    font-size: 0.8rem;
+}
+.signin-form input{
+    padding: 5px;
+    border-radius: 10px;
+    border: none;
+    background-color: rgba(255, 255, 255, 0.838);
+    outline: none;
+}
+.signin-buttons{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-top: 20px;
+}
+.signin-form button{
+    width: 80px;
+    border-radius: 15px;
+    padding: 5px;
+    border: none;
+    outline: none;
+    background-color: rgb(206, 206, 206);
+    font-weight: 500;
+    cursor: pointer;
+}
+.signin-form button:hover{
+    background-color: rgba(255, 0, 0, 0.134);
+    color: white;
+}
+
+.error-msg{
+    color: red;
+    font-size: 0.65rem;
+    margin-top: -10px;
+}
+
+.dont-have-account{
+    color: rgb(156, 156, 156);
+    text-align: center;
+    font-size: 0.7rem;
+}
+.dont-have-account span{
+    color: red;
+    cursor: pointer;
+}
+.dont-have-account span:hover{
+    transform: scale(1.1);
+}

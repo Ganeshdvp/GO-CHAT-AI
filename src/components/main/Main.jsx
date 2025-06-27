@@ -1,8 +1,10 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import './Main.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faCode, faEye, faImage, faLightbulb, faMicrophone, faPaperPlane, faPeopleGroup } from '@fortawesome/free-solid-svg-icons';
 import { faCompass } from '@fortawesome/free-regular-svg-icons';
+import SignUp from '../SignUp/SignUp';
+import SignIn from '../SignIn/SignIn';
 
 
 // Dummy data and handlers to replace context
@@ -15,6 +17,16 @@ const Main = () => {
   const [showResult, setShowResult] = useState(false);
   const [loading, setLoading] = useState(false);
   const [resultData, setResultData] = useState('');
+
+  const [showForm, setShowForm] = useState('signup');
+
+  if(showForm === 'signup'){
+    return <SignUp handleClick = {()=> setShowForm("signin")} closeForm={()=> setShowForm(null)} />
+  }
+  
+  if(showForm === 'signin'){
+    return <SignIn handleClick = {()=> setShowForm("signup")} closeForm={()=> setShowForm(null)}/>
+  }
 
 
    const onSent = () => {
@@ -30,6 +42,7 @@ const Main = () => {
     setInput('');
   };
 
+  
 
 
 
@@ -38,7 +51,7 @@ const Main = () => {
     <div className='main'>
       <div className="nav">
         <p>GO-CHAT-AI</p>
-        <img src="https://cdn-icons-png.flaticon.com/512/4113/4113045.png" alt="logo" />
+        <img src="https://cdn-icons-png.flaticon.com/512/4113/4113045.png" alt="logo" onClick={()=> setShowForm('signup')}/>
       </div>
       <div className="main-container">
 
