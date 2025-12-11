@@ -5,20 +5,18 @@ import { faBars, faCode, faEye, faImage, faLightbulb, faMicrophone, faPaperPlane
 import { faCompass } from '@fortawesome/free-regular-svg-icons';
 import SignUp from '../SignUp/SignUp';
 import SignIn from '../SignIn/SignIn';
+import { InputBottom } from '../inputBottom/InputBottom';
+import appStore from '../../constants/appStore';
+import { Chat } from '../chat/Chat';
 
-
-// Dummy data and handlers to replace context
-const DUMMY_RESULT = "This is a sample GO-CHAT-AI response because it is based on Gemini API, it asking money so...";
 
 const Main = () => {
 
-  const [input, setInput] = useState('');
-  const [recentPrompt, setRecentPrompt] = useState('');
-  const [showResult, setShowResult] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [resultData, setResultData] = useState('');
-
   const [showForm, setShowForm] = useState('signup');
+
+  const { showResult} = appStore();
+
+
 
   if(showForm === 'signup'){
     return <SignUp handleClick = {()=> setShowForm("signin")} closeForm={()=> setShowForm(null)} />
@@ -29,23 +27,9 @@ const Main = () => {
   }
 
 
-   const onSent = () => {
-    if (!input.trim()) return;
-    setRecentPrompt(input);
-    setShowResult(true);
-    setLoading(true);
-    // Simulate API call
-    setTimeout(() => {
-      setResultData(DUMMY_RESULT);
-      setLoading(false);
-    }, 1200);
-    setInput('');
-  };
+
 
   
-
-
-
 
   return (
     <div className='main'>
@@ -53,8 +37,8 @@ const Main = () => {
         <p>GO-CHAT-AI</p>
         <img src="https://cdn-icons-png.flaticon.com/512/4113/4113045.png" alt="logo" onClick={()=> setShowForm('signup')}/>
       </div>
-      <div className="main-container">
 
+      <div className="main-container">
         {!showResult? (  //ternary operator for when we enter prompt then it hide the backgroud stuff..
           <>
             <div className="greet">
@@ -80,39 +64,11 @@ const Main = () => {
               </div>
             </div>
           </>
-          ) : ( <div className='result'>
-            <div className="result-tittle">
-              <img src="https://cdn-icons-png.flaticon.com/512/4113/4113045.png" alt="logo" />
-              <p>{recentPrompt}</p>
-            </div>
-            <div className="result-data">
-              <FontAwesomeIcon icon={faEye} className='stars_icon'/>
-              {loading? ( <div className='loader' >
-                <hr />
-                <hr />
-                <hr />
-              </div>
-              ) : ( <p dangerouslySetInnerHTML={{__html:resultData}}></p>
-              )}
-            </div>
-          </div>
+          ) : (
+              <Chat/>
         )}
         <br></br>
-        <div className="main-bottom">
-          <div className="search-box">
-            <input onChange={(e) => {
-              setInput(e.target.value);
-            }} value={input} type="text" placeholder='Enter a prompt here..' onKeyDown={e => { if (e.key === 'Enter') onSent(); }} />
-            <div>
-              <FontAwesomeIcon icon={faImage} className='gallery'/>
-              <FontAwesomeIcon icon={faMicrophone} className='mic'/>
-              {input? <FontAwesomeIcon icon={faPaperPlane} onClick={() => onSent()} className='send' />: null}
-            </div>
-          </div>
-          <p className="bottom-info">
-            GO-CHAT-AI may display inaccurate info, including about people, so double-check its responses. Your privacy and Gemini Apps.
-          </p>
-        </div>
+         <InputBottom/>
       </div>
     </div>
   )

@@ -1,36 +1,29 @@
 import React, {  useState } from 'react'
 import './Sidebar.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faCircleInfo, faClockRotateLeft, faCommentDots, faGear, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faCircleInfo, faClockRotateLeft, faCommentDots, faGear, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
+import appStore from '../../constants/appStore';
 
-// Dummy data and handlers to replace context
-const DUMMY_PREV_PROMPT = [
-    "What is Gemini?",
-    "Show me a cat picture",
-    "Explain quantum computing",
-    "Suggest a movie"
-];
 
 const Sidebar = () => {
+
     const [extend, setExtend] = useState(false);
-    const [prevPrompt, setPrevPrompt] = useState(DUMMY_PREV_PROMPT);
+    const { recentPrompt, deleteRecentPrompt, setShowResult} = appStore();
+    
+    console.log(recentPrompt);
     
 
-      // Dummy handlers
-    const onSent = async (prompt) => {
-        alert(`Pretend to send: ${prompt}`);
-    };
-    const setRecentPrompt = (prompt) => {
-        // No-op for dummy
-    };
+
     const newChat = () => {
-        alert("Start a new chat (dummy)");
+        setShowResult(false)
     };
 
-    const loadPrompt = async (prompt) => {
-        setRecentPrompt(prompt);
-        await onSent(prompt);
-    };
+
+    const handleDelete = (index)=>{
+        deleteRecentPrompt(index)
+    }
+
+
     return (
         <div className='sidebar'>
             <div className="top">
@@ -46,12 +39,13 @@ const Sidebar = () => {
                 {extend ? <div className="recent">
                     <p className="recent-tittle">Recent</p>
                     {
-                        prevPrompt.map(
+                        recentPrompt.map(
                             (ele, index) => {
                                 return (
-                                    <div onClick={()=>loadPrompt(ele)} className="recent-entry">
+                                    <div className="recent-entry" key={index}>
                                         <FontAwesomeIcon icon={faCommentDots}/>
                                         <p>{ele.slice(0,18)}...</p>
+                                        <FontAwesomeIcon icon={faTrash} onClick={()=> handleDelete(index)}/>
                                     </div>
 
                                 )
