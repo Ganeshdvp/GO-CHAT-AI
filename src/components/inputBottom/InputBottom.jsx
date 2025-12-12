@@ -12,7 +12,7 @@ import { useRef } from "react";
 export const InputBottom = () => {
 
   // zustand store
-  const { setLoading, setShowResult, setRecentPrompt, setResultData } = appStore();
+  const { setLoading, setShowResult, setRecentChats, addMessage, chats, activeChat,setActiveChat } = appStore();
 
   const inputRef = useRef();
 
@@ -28,10 +28,10 @@ export const InputBottom = () => {
         contents: check,
       });
       setLoading(false);
-      setResultData({sender:'ai', text: response.text});
+      addMessage({sender:'ai', text: response.text});
     } catch (err) {
       console.log(err);
-       setResultData({sender:'ai', text: JSON.stringify(err.name)});
+       addMessage({sender:'ai', text: JSON.stringify(err.name)});
         setLoading(false);
     }
   };
@@ -41,16 +41,19 @@ export const InputBottom = () => {
     if (!check.trim()) return;
     setLoading(true);
     setShowResult(true);
-    setRecentPrompt(check);
-    setResultData({sender:'user', text: check})
+    addMessage({sender:'user', text: check})
 
     // API call
     geminiChatFetch(check);
+    setRecentChats()
+
+    setActiveChat(activeChat || chats[0].id)
 
     // clear input
     inputRef.current.value = "";
   };
   
+  console.log(chats);
   
 
   return (

@@ -1,4 +1,4 @@
-import React, {  useState } from 'react'
+import React, {  useEffect, useState } from 'react'
 import './Sidebar.css'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faBars, faCircleInfo, faClockRotateLeft, faCommentDots, faGear, faPlus, faTrash } from '@fortawesome/free-solid-svg-icons';
@@ -8,20 +8,26 @@ import appStore from '../../constants/appStore';
 const Sidebar = () => {
 
     const [extend, setExtend] = useState(false);
-    const { recentPrompt, deleteRecentPrompt, setShowResult} = appStore();
+    const { recentChats, deleteRecentChat, setShowResult, setNewChat, setActiveChat} = appStore();
     
-    console.log(recentPrompt);
     
 
 
-    const newChat = () => {
-        setShowResult(false)
+    const newChatSideBar = () => {
+        setShowResult(false);
+        setNewChat()
     };
 
 
     const handleDelete = (index)=>{
-        deleteRecentPrompt(index)
+        deleteRecentChat(index)
     }
+
+    useEffect(()=>{
+        if(recentChats.length <= 0){
+            setShowResult(false)
+        }
+    },[recentChats])
 
 
     return (
@@ -32,20 +38,22 @@ const Sidebar = () => {
                         return !prev
                     })
                 }} className='menu'/>
-                <div onClick={newChat} className="new-chat">
+                <div onClick={newChatSideBar} className="new-chat">
                     <FontAwesomeIcon icon={faPlus} className='plus-icon'/>
                     {extend ? <p>New Chat</p> : null}
                 </div>
                 {extend ? <div className="recent">
                     <p className="recent-tittle">Recent</p>
                     {
-                        recentPrompt.map(
+                        recentChats.map(
                             (ele, index) => {
                                 return (
-                                    <div className="recent-entry" key={index}>
-                                        <FontAwesomeIcon icon={faCommentDots}/>
-                                        <p>{ele.slice(0,18)}...</p>
-                                        <FontAwesomeIcon icon={faTrash} onClick={()=> handleDelete(index)}/>
+                                    <div className="recent-entry" key={ele.id} onClick={()=> {setActiveChat(ele.id); setShowResult(true)}}>
+                                       <div className='recent-entry2'>
+                                         <FontAwesomeIcon icon={faCommentDots}/>
+                                        <p>{ele.text?.slice(0,18)}...</p>
+                                       </div>
+                                        <FontAwesomeIcon icon={faTrash} className='trash-icon' onClick={()=> handleDelete(ele.id, index)}/>
                                     </div>
 
                                 )

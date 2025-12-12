@@ -4,7 +4,7 @@ import { USER_URL, AI_URL } from "../../constants/constants";
 import "./Chat.css";
 
 export const Chat = () => {
-  const { loading, resultData } = appStore();
+  const { chats, activeChat } = appStore();
   const chatRef = useRef();
 
   //auto scroll up
@@ -12,54 +12,37 @@ export const Chat = () => {
     if (chatRef.current) {
       chatRef.current.scrollTop = chatRef.current.scrollHeight;
     }
-  }, [resultData]);
+  }, [chats, activeChat]); 
+
+ const activeChatData = chats.find((chat) => chat.id === activeChat);
+ console.log(activeChatData);
+ 
+  
 
   return (
     <>
-      <div className="chat-container" ref={chatRef}>
-        {resultData?.map((item, index) => {
-          const isLastAiMessage =
-            item.sender === "ai" && index === resultData.length+1 && loading;
-          return (
-            <div
-              key={index}
-              className={`chat-row ${
-                item.sender === "user" ? "user-style" : "ai-style"
-              }`}
-            >
-              <div
-                className={`chat-bubble ${
-                  item.sender === "user" ? "user-bubble" : "ai-bubble"
-                }`}
-              >
-                {item.sender === "ai" ? (
-                  <>
-                    {isLastAiMessage ? (
-                      <span>Loading...</span>
-                    ) : (
-                      <>
-                        <p>{item.text}</p>
-                        <img
-                          src={item.sender === "ai" && AI_URL}
-                          alt="images"
-                        />
-                      </>
-                    )}
-                  </>
-                ) : (
-                  <>
-                    <p>{item.text}</p>
-                    <img
-                      src={item.sender === "user" && USER_URL}
-                      alt="images"
-                    />
-                  </>
-                )}
-              </div>
-            </div>
-          );
-        })}
-      </div>
+    <div className="chat-container" ref={chatRef}>
+      {activeChatData?.messages?.map((item, index) => (
+        <div
+          key={`${activeChat}-${index}`}
+          className={`chat-row ${
+            item.sender === "user" ? "user-style" : "ai-style"
+          }`}
+        >
+          <div
+            className={`chat-bubble ${
+              item.sender === "user" ? "user-bubble" : "ai-bubble"
+            }`}
+          >
+            <p>{item.text}</p>
+            <img
+              src={item.sender === "user" ? USER_URL : AI_URL}
+              alt="icon"
+            />
+          </div>
+        </div>
+      ))}
+    </div>
     </>
   );
 };
