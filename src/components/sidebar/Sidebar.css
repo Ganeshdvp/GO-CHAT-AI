@@ -26,9 +26,11 @@
     transform: scale(1.05);
 }
 .sidebar .new-chat{
+    width: 100%;
     margin-top: 50px;
     display: inline-flex;
     align-items: center;
+    justify-content: center;
     gap: 2px;
     padding: 5px 15px;
     background-color: #560909;
@@ -36,6 +38,9 @@
     font-size: 16px;
     color: rgb(255, 255, 255);
     cursor: pointer;
+}
+.sidebar .new-chat:hover{
+      background-color: #440303;
 }
 .new-chat .plus-icon{
     font-size: 1.3rem;
@@ -57,6 +62,7 @@
 .sidebar .recent-entry{
     display: flex;
     align-items: center;
+    justify-content: space-between;
     gap: 10px;
     padding: 10px;
     padding-right: 10px;
@@ -66,6 +72,19 @@
 }
 .sidebar .recent-entry:hover{
     background-color: #6a1212;
+}
+.sidebar .recent-entry-bottom{
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    padding-right: 10px;
+    border-radius: 50px;
+    color: #ffffff;
+    cursor: pointer;
+}
+.sidebar .recent-entry-bottom:hover{
+        background-color: #6a1212;
 }
 .sidebar .recent-entry2{
     display: flex;
@@ -90,6 +109,15 @@
 .sidebar .bottom img{
     width: 25px;
 }
+
+.no-recent-chats{
+    color: rgb(147, 147, 147);
+    font-size: 12px;
+    text-align: center;
+    padding-top: 10px;
+}
+
+
 
 
 @media(max-width:600px){

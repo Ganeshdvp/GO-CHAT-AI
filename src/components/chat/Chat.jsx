@@ -1,28 +1,30 @@
+
 import { useEffect, useRef } from "react";
 import appStore from "../../constants/appStore";
 import { USER_URL, AI_URL } from "../../constants/constants";
 import "./Chat.css";
 
 export const Chat = () => {
-  const { chats, activeChat } = appStore();
-  const chatRef = useRef();
 
-  //auto scroll up
-  useEffect(() => {
-    if (chatRef.current) {
-      chatRef.current.scrollTop = chatRef.current.scrollHeight;
-    }
-  }, [chats, activeChat]); 
+    const loading = appStore(store=> store.loading)
+    const activeChat = appStore(store=> store.activeChat)
+    const chats = appStore(store=> store.chats)
+    const chatContainer = useRef();
+    
 
- const activeChatData = chats.find((chat) => chat.id === activeChat);
- console.log(activeChatData);
- 
-  
+    const activeChatObject = chats.find((chat)=> chat.id === activeChat);
 
+    useEffect(()=>{
+      if(chatContainer.current){
+        chatContainer.current.scrollTop = chatContainer.current.scrollHeight;
+      }
+    },[chats])
+    
+    
   return (
     <>
-    <div className="chat-container" ref={chatRef}>
-      {activeChatData?.messages?.map((item, index) => (
+    <div className="chat-container" ref={chatContainer}>
+      {activeChatObject?.messages?.map((item, index) => (
         <div
           key={`${activeChat}-${index}`}
           className={`chat-row ${
@@ -34,7 +36,7 @@ export const Chat = () => {
               item.sender === "user" ? "user-bubble" : "ai-bubble"
             }`}
           >
-            <p>{item.text}</p>
+            <p>{item.content}</p>
             <img
               src={item.sender === "user" ? USER_URL : AI_URL}
               alt="icon"
@@ -42,6 +44,16 @@ export const Chat = () => {
           </div>
         </div>
       ))}
+        {/* Loader */}
+        {
+          loading && (
+            <div className="loader">
+  <hr />
+  <hr />
+  <hr />
+</div>
+          )
+        }
     </div>
     </>
   );

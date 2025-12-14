@@ -59,3 +59,28 @@
 .ai-bubble{
     flex-direction: row-reverse;
 }
+
+
+.loader{
+    width: 70%;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+.loader hr{
+    border-radius: 4px;
+    border: none;
+    background-color: #720909;
+    background: linear-gradient(to right,#600808,#000000,#700b0b);
+    background-size: 800px 50px;
+    height: 20px;
+    animation: loader 3s infinite linear;
+}
+@keyframes loader{
+    0%{
+        background-position: -800px 0px;
+    }
+    100%{
+        background-position: 800px 0px;
+    }
+}

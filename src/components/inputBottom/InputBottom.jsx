@@ -5,55 +5,57 @@ import {
   faMicrophone,
   faPaperPlane,
 } from "@fortawesome/free-solid-svg-icons";
-import appStore from "../../constants/appStore";
 import { GoogleGenAI } from "@google/genai";
-import { useRef } from "react";
+import { useState } from "react";
+import appStore from "../../constants/appStore";
+
 
 export const InputBottom = () => {
 
-  // zustand store
-  const { setLoading, setShowResult, setRecentChats, addMessage, chats, activeChat,setActiveChat } = appStore();
+  const [inputValue, setInputValue] = useState("");
+  const { setLoading, setShowChatComponent, addMessage, activeChat, setRecentChats} = appStore();
 
-  const inputRef = useRef();
 
   // The client gets the API key from the environment variable `GEMINI_API_KEY`.
   const ai = new GoogleGenAI({
     apiKey: import.meta.env.VITE_API_KEY,
   });
 
-  const geminiChatFetch = async (check) => {
+  const geminiChatFetch = async (value) => {
     try {
       const response = await ai.models.generateContent({
         model: "gemini-2.5-flash",
-        contents: check,
+        contents: value,
       });
       setLoading(false);
-      addMessage({sender:'ai', text: response.text});
+      addMessage(activeChat, {sender:'ai', content: response.text});
     } catch (err) {
       console.log(err);
-       addMessage({sender:'ai', text: JSON.stringify(err.name)});
+       addMessage(activeChat, {sender:'ai', content: JSON.stringify(err.name)});
         setLoading(false);
     }
   };
 
   const onSent = () => {
-    const check = inputRef.current.value;
-    if (!check.trim()) return;
-    setLoading(true);
-    setShowResult(true);
-    addMessage({sender:'user', text: check})
+    if(!inputValue) return;
+    if(!inputValue.trim()) return;
 
-    // API call
-    geminiChatFetch(check);
-    setRecentChats()
+    // Show Chat Component
+    setShowChatComponent(false);
+    // Loading
+    setLoading(true)
+    // send message
+    addMessage(activeChat, {sender: 'user', content: inputValue})
+    //setting recent chat
+    setRecentChats({id: activeChat, recentChatText: inputValue})
 
-    setActiveChat(activeChat || chats[0].id)
+    // fetching
+    geminiChatFetch(inputValue)
 
-    // clear input
-    inputRef.current.value = "";
+   // clearing input
+   setInputValue("")
   };
-  
-  console.log(chats);
+
   
 
   return (
@@ -61,7 +63,8 @@ export const InputBottom = () => {
       <div className="main-bottom">
         <div className="search-box">
           <input
-            ref={inputRef}
+            value={inputValue}
+            onChange={(e)=> setInputValue(e.target.value)}
             type="text"
             placeholder="Enter a prompt here.."
             onKeyDown={(e) => {
@@ -71,13 +74,11 @@ export const InputBottom = () => {
           <div>
             <FontAwesomeIcon icon={faImage} className="gallery" />
             <FontAwesomeIcon icon={faMicrophone} className="mic" />
-            {inputRef ? (
               <FontAwesomeIcon
                 icon={faPaperPlane}
                 onClick={() => onSent()}
                 className="send"
               />
-            ) : null}
           </div>
         </div>
         <p className="bottom-info">
