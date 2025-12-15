@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./Sidebar.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -20,6 +20,7 @@ const Sidebar = () => {
     recentChats,
     deleteRecentChats,
     setActiveChat,
+    setShowChatComponent
   } = appStore();
 
   const handleNewChat = () => {
@@ -28,7 +29,14 @@ const Sidebar = () => {
 
   const handleClick = (id) => {
     setActiveChat(id);
+    setShowChatComponent(false)
   };
+
+  useEffect(()=>{
+    if(recentChats.length ===0){
+      setShowChatComponent(true)
+    }
+  },[recentChats])
 
 
 

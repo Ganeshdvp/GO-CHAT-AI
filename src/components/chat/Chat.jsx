@@ -3,6 +3,10 @@ import { useEffect, useRef } from "react";
 import appStore from "../../constants/appStore";
 import { USER_URL, AI_URL } from "../../constants/constants";
 import "./Chat.css";
+import Markdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
+import Prism from "prismjs";
+import "prismjs/themes/prism-tomorrow.css";
 
 export const Chat = () => {
 
@@ -18,7 +22,13 @@ export const Chat = () => {
       if(chatContainer.current){
         chatContainer.current.scrollTop = chatContainer.current.scrollHeight;
       }
-    },[chats])
+    },[chats, activeChat])
+
+    useEffect(() => {
+  requestAnimationFrame(() => {
+    Prism.highlightAll();
+  });
+}, [activeChatObject?.messages?.length]);
     
     
   return (
@@ -36,7 +46,7 @@ export const Chat = () => {
               item.sender === "user" ? "user-bubble" : "ai-bubble"
             }`}
           >
-            <p>{item.content}</p>
+            <div className="reset-tw div"><Markdown remarkPlugins={[remarkGfm]}>{item.content}</Markdown></div>
             <img
               src={item.sender === "user" ? USER_URL : AI_URL}
               alt="icon"

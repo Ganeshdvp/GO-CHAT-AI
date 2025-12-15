@@ -1,6 +1,6 @@
-import React from 'react'
 import Sidebar from './components/sidebar/Sidebar'
-import Main from './components/main/Main'
+import Main from './components/main/Main';
+import '../public/prism.css';
 
 const App = () => {
   return (
