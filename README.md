@@ -8,3 +8,4 @@
 - installed prismjs
 - imported the prism.css file in app root
 - imported prismjs in chat component
+- implemented live typing by using the gemini streaming api

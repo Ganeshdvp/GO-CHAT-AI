@@ -4,7 +4,7 @@ import {Formik, Form, Field, ErrorMessage} from 'formik';
  import * as Yup from 'yup';
 
 
-export default function ({ handleClick , closeForm}) {
+export default function SignUp({ handleClick , closeForm}) {
 
     const initialData = {
         email : '',
@@ -21,6 +21,7 @@ export default function ({ handleClick , closeForm}) {
     const submissions = (values, {resetForm})=>{
         console.log(values);
         resetForm();
+        closeForm()
     }
     
   return (

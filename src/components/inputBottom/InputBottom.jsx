@@ -13,7 +13,7 @@ import appStore from "../../constants/appStore";
 export const InputBottom = () => {
 
   const [inputValue, setInputValue] = useState("");
-  const { setLoading, setShowChatComponent, addMessage, activeChat, setRecentChats} = appStore();
+  const {appendMessageToChat, setLoading, setShowChatComponent, addMessage, activeChat, setRecentChats} = appStore();
 
 
   // The client gets the API key from the environment variable `GEMINI_API_KEY`.
@@ -22,17 +22,24 @@ export const InputBottom = () => {
   });
 
   const geminiChatFetch = async (value) => {
-    try {
-      const response = await ai.models.generateContent({
-        model: "gemini-2.5-flash",
-        contents: value,
-      });
-      setLoading(false);
-      addMessage(activeChat, {sender:'ai', content: response.text});
-    } catch (err) {
-      console.log(err);
-       addMessage(activeChat, {sender:'ai', content: JSON.stringify(err.name)});
+     try {
+    const stream = await ai.models.generateContentStream({
+      model: "gemini-2.5-flash",
+      contents: value,
+    });
+    for await (const chunk of stream) {
+      const text = chunk?.candidates?.[0]?.content?.parts?.[0]?.text;
+      if (text) {
         setLoading(false);
+        appendLetters(activeChat, text, 1);
+      }
+    }
+    // wait for all typing to finish
+    await typingQueue;
+    } catch (err) {
+     console.log(err);
+    appendLetters(activeChat, "\n⚠️ Error generating response");
+    setLoading(false);
     }
   };
 
@@ -49,12 +56,27 @@ export const InputBottom = () => {
     //setting recent chat
     setRecentChats({id: activeChat, recentChatText: inputValue})
 
+    // EMPTY AI MESSAGE (important)
+  addMessage(activeChat, { sender: "ai", content: "" });
+
     // fetching
     geminiChatFetch(inputValue)
 
    // clearing input
    setInputValue("")
   };
+
+
+  let typingQueue = Promise.resolve();
+  const appendLetters = (chatId, text, delay = 8) => {
+  typingQueue = typingQueue.then(async () => {
+    for (let char of text) {
+      appendMessageToChat(chatId, char);
+      await new Promise((res) => setTimeout(res, delay));
+    }
+  });
+  return typingQueue;
+};
 
   
 

@@ -40,6 +40,28 @@ const appStore = create((set,get)=>{
             }
         }),
 
+        //append the chat
+        appendMessageToChat : (chatId, chunk)=> set(
+            (state)=>{
+                const updatedChats = state.chats.map((chat)=> {
+                    if(chat.id !== chatId) return chat;
+
+                    const messages = [...chat.messages];
+                    const lastIndex = messages.length - 1;
+
+                    if(lastIndex < 0) return chat;
+
+                    messages[lastIndex] = {
+                        ...messages[lastIndex],
+                        content: (messages[lastIndex].content || "") + chunk,
+                    }
+
+                    return {...chat, messages};
+                });
+                return {chats : updatedChats};
+            }
+        ),
+
         // new chat
         setNewChat : ()=> {
             const newChatId = crypto.randomUUID();

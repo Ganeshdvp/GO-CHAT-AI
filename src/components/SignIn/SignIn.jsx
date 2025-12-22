@@ -18,6 +18,7 @@ export default function SignIn({handleClick , closeForm}) {
       const submissions = (values, {resetForm})=>{
           console.log(values);
           resetForm();
+          closeForm()
       }
 
 
